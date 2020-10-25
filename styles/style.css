@@ -1,0 +1,10 @@
+body {
+    background-color: black;
+}
+
+#game-board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
