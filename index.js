@@ -6,10 +6,21 @@ const gravity = 0.98
 const friction = 0.9
 const keys = []
 let meteorites = []
+let bullets = []
 let ratio = 200
+let score = 0
+let lives = 3
+$context.xplosionSound = new Audio();
+// $context.xplosionSound.src = "sounds/xplosn.mp3";
+$context.laserSound = new Audio();
+// $context.laserSound.src = "sounds/laser.mp3"
+
 
 window.onload = () => {
-    // loadMenu()
+    $context.startSound = new Audio();
+    // $context.startSound.src = "sounds/mainTheme.mp3";
+    $context.startSound.play();
+    $context.startSound.loop = true;
     startGame()
 }
 
@@ -37,27 +48,61 @@ class Alien {
         this.img.src = ('./images/char1-front.png')
     }
     draw() {
-        // console.log("func draw from Alien called")
-        if (this.x < -this.width+7) this.x = $canvas.width-7
-        if (this.x > $canvas.width-7) this.x = -this.width+7
+        if (this.x < -this.width + 7) this.x = $canvas.width - 7
+        if (this.x > $canvas.width - 7) this.x = -this.width + 7
         $context.drawImage(this.img, this.x, this.y, this.width, this.height)
     }
     changePos() {
         this.x += this.velX
         this.velX *= friction
     }
+    isColliding(meteorite) {
+        return (
+            this.y < meteorite.y + meteorite.height &&
+            this.y + this.height > meteorite.y &&
+            this.x < meteorite.x + meteorite.width &&
+            this.x + this.width > meteorite.x
+        )
+    }
+    shoot() {
+
+    }
+
 }
-class Obstacle {
+class Meteorite {
     constructor() {
-        this.y = 10
-        this.x = 350
-        this.height = 130
-        this.width = 50
+        const minXPos = 0
+        const maxXPos = $canvas.width - 100
+        const randomXPos = Math.floor(Math.random() * (maxXPos - minXPos))
+        // console.log(`radnwomPos: ${randomXPos}`)
+        const minWidth = 100
+        const maxWidth = 150
+        const randomWidth = Math.floor(Math.random() * (120 - 50) + 50)
+        // console.log(`random width: ${randomWidth}`)
+        this.y = 0
+        this.x = randomXPos
+        this.width = randomWidth
+        this.height = randomWidth + 100
         this.img = new Image()
         this.img.src = ('./images/meteorite.png')
     }
     draw() {
         this.y += 4
+        $context.drawImage(this.img, this.x, this.y, this.width, this.height)
+    }
+}
+
+class Bullet {
+    constructor() {
+        this.x = alien.x + alien.width/2 - 25
+        this.y = $canvas.height-alien.height
+        this.width = 50
+        this.height = 50
+        this.img = new Image()
+        this.img.src = ('./images/bullet.png')
+    }
+    draw() {
+        this.y-=10
         $context.drawImage(this.img, this.x, this.y, this.width, this.height)
     }
 }
@@ -84,24 +129,61 @@ function startGame() {
     if (gameInterval) return
     gameInterval = setInterval(updateGame, 1000 / 60)
 }
+
 function generateMeteorites() {
     if (frames % ratio === 0) {
-        meteorites.push(new Obstacle())
+        meteorites.push(new Meteorite())
         // console.log(obstacles)
     }
 }
+
 function drawMeteorites() {
     meteorites.forEach(obs => obs.draw())
 }
+
 function clearMeteorites() {
     meteorites = meteorites.filter(obs => obs.y > -obs.height)
+}
+function generateBullets() {
+    bullets.push(new Bullet())
+}
+
+function drawBullets() {
+    bullets.forEach(bull => bull.draw())
+}
+
+function clearBullets() {
+    bullets = bullets.filter(obs => obs.y > -0)
 }
 function loadMenu() {
     mainMenu.draw()
     console.log("main menu")
 }
+
 function clearCanvas() {
     $context.clearRect(0, 0, $canvas.width, $canvas.height)
+}
+
+function printScore() {
+    if (frames % 200 === 0 && frames > 600) score++
+    $context.font = "40px Sans-serif"
+    $context.fillStyle = "white"
+    $context.fillText(`Score: ${score}`, $canvas.width - $canvas.width / 2 - 40, 50)
+}
+
+function printLives() {
+    $context.font = "40px Sans-serif"
+    $context.fillStyle = "white"
+    $context.fillText(`Lives: ${lives}`, 10, 50)
+}
+
+function checkCollitions() {
+    meteorites.forEach(meteorite => {
+        if (alien.isColliding(meteorite)) {
+            console.log("u LOST")
+            $context.xplosionSound.play();
+        }
+    })
 }
 
 function updateGame() {
@@ -113,11 +195,20 @@ function updateGame() {
     clearMeteorites()
     clearCanvas()
 
+    checkCollitions()
+
     board.draw()
     alien.draw()
 
     generateMeteorites()
     drawMeteorites()
+
+    drawBullets()
+    clearBullets()
+
+    printScore()
+    printLives()
+    // console.log("bullets: "+ bullets)
 }
 // let mainMenu = new Menu() //create main menu
 let board = new Board() //create board instance
@@ -128,14 +219,21 @@ let alien = new Alien() //create alien instance
 function checkKeys() {
     if (keys["ArrowLeft"]) {
         alien.velX--
-        console.log("moving right")
+        // console.log("moving left")
     }
     if (keys["ArrowRight"]) {
         alien.velX++
-        console.log("moving left")
     }
+
+    
 }
 document.onkeydown = e => {
+    if (e.key === " ") {
+        generateBullets()
+        drawBullets()
+         $context.laserSound.play();
+
+    }
     keys[e.key] = true
 }
 
