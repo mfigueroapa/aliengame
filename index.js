@@ -10,15 +10,17 @@ let bullets = []
 let ratio = 200
 let score = 0
 let lives = 3
-$context.xplosionSound = new Audio();
-// $context.xplosionSound.src = "sounds/xplosn.mp3";
+$context.xplosion1Sound = new Audio();
+$context.xplosion1Sound.src = "sounds/xplosn2.mp3";
+$context.xplosion2Sound = new Audio();
+$context.xplosion2Sound.src = "sounds/xplosn1.mp3";
 $context.laserSound = new Audio();
-// $context.laserSound.src = "sounds/laser.mp3"
+$context.laserSound.src = "sounds/laser.mp3"
 
 
 window.onload = () => {
     $context.startSound = new Audio();
-    // $context.startSound.src = "sounds/mainTheme.mp3";
+    $context.startSound.src = "sounds/mainTheme.mp3"
     $context.startSound.play();
     $context.startSound.loop = true;
     startGame()
@@ -165,7 +167,12 @@ function clearCanvas() {
 }
 
 function printScore() {
-    if (frames % 200 === 0 && frames > 600) score++
+    if (frames % 200 === 0 && frames > 600) {
+        const min = 1
+        const max = 14
+        const randomPoints = Math.floor(Math.random() * (max-min) + min)
+        score+=randomPoints
+    }
     $context.font = "40px Sans-serif"
     $context.fillStyle = "white"
     $context.fillText(`Score: ${score}`, $canvas.width - $canvas.width / 2 - 40, 50)
@@ -178,16 +185,44 @@ function printLives() {
 }
 
 function checkCollitions() {
-    meteorites.forEach(meteorite => {
+    meteorites.forEach((meteorite,index) => {
         if (alien.isColliding(meteorite)) {
+            lives-=1
+            meteorites.splice(meteorite, 1)
+            // lives.splice(index,1)
+            console.log(index)
             console.log("u LOST")
-            $context.xplosionSound.play();
+            //restar vida correctamente
+            $context.xplosion1Sound.play();
         }
     })
+}
+function checkIfBulletHit() {
+    bullets.forEach((bullet, i) => {
+        meteorites.forEach((meteorite, index) => {
+
+            if (bullet.y < meteorite.y + meteorite.height &&
+                bullet.y + bullet.height > meteorite.y &&
+                bullet.x < meteorite.x + meteorite.width &&
+                bullet.x + bullet.width > meteorite.x) {
+                    meteorites.splice(index,1)
+                    bullets.splice(i,1)
+                    score+=25
+                    $context.xplosion2Sound.play();
+                    
+                }
+        })
+    })
+}
+
+function checkIfGameOver() {
+    if(lives < 1) alert("Perdiste!")
 }
 
 function updateGame() {
     frames++
+
+    checkIfGameOver()
 
     checkKeys()
     alien.changePos()
@@ -206,8 +241,12 @@ function updateGame() {
     drawBullets()
     clearBullets()
 
+    checkIfBulletHit()
+
     printScore()
     printLives()
+
+    
     // console.log("bullets: "+ bullets)
 }
 // let mainMenu = new Menu() //create main menu
@@ -231,7 +270,7 @@ document.onkeydown = e => {
     if (e.key === " ") {
         generateBullets()
         drawBullets()
-         $context.laserSound.play();
+        $context.laserSound.play();
 
     }
     keys[e.key] = true
