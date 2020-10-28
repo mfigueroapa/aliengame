@@ -1,10 +1,92 @@
-body {
-    background-color: black;
-}
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-#game-board {
+body {
+    /* font-family: 'Press Start 2P', cursive; */
+    font-family: 'Press Start 2P';
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-self: center;
+    background: url('../images/galaxy.jpg');
+}
+p {
+    color: #FFF;
+}
+#game-board {
+    height: 900px;
+    width: 900px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    /* background-color: royalblue; */
 }
 
+canvas {
+    display: none;
+    font-family: 'Press Start 2P',
+    cursive;
+}
+
+.startScreen {
+    margin-top: 100px;
+    height: 700px;
+    width: 700px;
+    display: block;
+    /* display: none; */
+    background: url('../images/mainMenuBackground.jpg')
+    /* background-color: red; */
+}
+
+.instructionsDiv {
+    margin-top: 100px;
+    /* padding-top: 10px; */
+    height: 700px;
+    width: 700px;
+    display: none;
+    /* display: block; */
+    background: url('../images/mainMenuBackground.jpg')
+}
+
+.instructionsDiv>p {
+    padding-top: 80px;
+    margin: 0 100px 0 100px;
+    font-size: medium;
+    line-height: 3rem;
+}
+
+.creditsDiv {
+    margin-top: 100px;
+    /* padding-top: 10px; */
+    height: 700px;
+    width: 700px;
+    display: none;
+    /* display: block; */
+    background: url('../images/mainMenuBackground.jpg')
+}
+
+.creditsDiv>p {
+    padding-top: 100px;
+    margin: 0 100px 0 100px;
+    font-size: large;
+    line-height: 2rem;
+}
+
+.gameOverDiv {
+    display: none;
+    margin-top: 100px;
+    height: 700px;
+    width: 700px;
+    display: none;
+    background: url('../images/mainMenuBackground.jpg')
+}
+.gameOverDiv > p {
+    margin-top: 270px;
+    line-height: 3rem;
+}
+.difficultyMessage{
+    display: block;
+}
+.buttons {
+    margin: 120px auto 0 auto;
+    height: 74px;
+    width: 404px;
+}

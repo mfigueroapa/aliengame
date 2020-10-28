@@ -5,14 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alien Savior</title>
     <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
+    <!-- <style>
+        @font-face {
+            font-family: 'Press Start 2P';
+            src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap')
+        }
+    </style> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> -->
 </head>
 <body>
 
   
     
     <div id="game-board">
-        <canvas id="canvas" width="900" height="900"></canvas>
+        <canvas id="canvas" width="900" height="900">
+            <div class="difficultyMessage">
+                <p>
+                    You are doing great! Now meteorites go twice as fast! Show them what you've got!
+                </p>
+            </div>
+            
+        </canvas>
+        <div class="startScreen">
+            <input class=" startBtn buttons" type="image" src="./images/start.png" />
+            <input class="instructionsBtn buttons" type="image" src="./images/instructions.png" />
+            <input class="creditsBtn buttons" type="image" src="./images/credits.png" />
+        </div>
+        <div class=instructionsDiv>
+            <p> - Use the keyboard arrows to move Lil Xalien to the sides and dodge the meteorites!
+                <br>
+                - Shoot your laser weapon with space bar!
+                <br>
+                - Score as many points as possible to save Planet Earth!
+            </p>
+            <input class="goBackInstructionsBtn buttons" type="image" src="./images/menu.png" />
+        </div>
+        <div class='creditsDiv'>
+            <p>Created by
+                <br>
+                <br>
+                Mauricio Figueroa 
+                <br>
+                < Computer Systems Engineer and software developer >
+                <br>
+                @maufigueroapa
+                <br>
+                <br>
+                <br>
+                Alberto Guzmán
+                <br>
+            </p>
+            <input class="goBackCreditsBtn buttons" type="image" src="./images/menu.png" />
+        </div>
+        <div class=gameOverDiv>
+            <p>
+                GAME OVER!
+                <br>
+                No lives left :(
+            </p>
+            <input class="mainMenuWhenLost buttons" type="image" src="./images/menu.png" />
+        </div>
+        
     </div>
+    
+     
+    
     
     <script src="index.js"></script>
     <link rel="stylesheet" href="styles/style.css" />
