@@ -311,57 +311,107 @@ function generateMeteorites() {
     if (gameOver != true) {
         console.log(`frames: ${frames} ratio: ${ratio} meteoriteSpeed: ${meteoriteSpeed}`)
         if (frames % ratio === 0) {
-            if (frames % 1000 === 0 && frames < 1001) {
+            if (frames % 500 === 0 && frames < 501) {
                 ratio = 150
                 meteoriteSpeed += 2
             }
-            if (frames % 2000 === 0 && frames < 2001) {
+            if (frames % 1000 === 0 && frames < 1001) {
                 ratio = 100
                 meteoriteSpeed += 2
             }
+            if (frames % 1500 === 0 && frames < 15001) {
+                meteoriteSpeed += 2
+                ratio = 50
+            }
+            if (frames % 2000 === 0 && frames < 2001) {
+                meteoriteSpeed += 2
+                ratio = 30
+            }
+            if (frames % 2500 === 0 && frames < 2501) {
+                meteoriteSpeed += 2
+                ratio = 20
+            }
             if (frames % 3000 === 0 && frames < 3001) {
+                meteoriteSpeed += 2
+                ratio = 10
+            }
+            if (frames % 3300 === 0 && frames < 3301) {
+                meteoriteSpeed += 2
+                ratio = 5
+            }
+            if (frames % 3800 === 0 && frames < 3801) {
                 meteoriteSpeed += 2
                 ratio = 50
             }
             if (frames % 4000 === 0 && frames < 4001) {
                 meteoriteSpeed += 2
-                ratio = 30
+                ratio = 15
+            }
+            if (frames %  4200 === 0 && frames < 4201) {
+                meteoriteSpeed += 2
+                ratio = 10
             }
             if (frames % 4500 === 0 && frames < 4501) {
                 meteoriteSpeed += 2
-                ratio = 20
-            }
-            if (frames % 4750 === 0 && frames < 4751) {
-                meteoriteSpeed += 2
-                ratio = 10
-            }
-            if (frames % 5000 === 0 && frames < 5001) {
-                meteoriteSpeed += 2
                 ratio = 5
             }
-            if (frames % 6000 === 0 && frames < 6001) {
-                meteoriteSpeed += 2
-                ratio = 50
-            }
-            if (frames % 7000 === 0 && frames < 7001) {
-                meteoriteSpeed += 2
-                ratio = 15
-            }
-            if (frames % 8000 === 0 && frames < 8001) {
-                meteoriteSpeed += 2
-                ratio = 10
-            }
-            if (frames % 9000 === 0 && frames < 9001) {
-                meteoriteSpeed += 2
-                ratio = 5
-            }
-
-
             meteorites.push(new Meteorite(meteoriteSpeed))
         }
     }
-
 }
+// function generateMeteorites() {
+//     if (gameOver != true) {
+//         console.log(`frames: ${frames} ratio: ${ratio} meteoriteSpeed: ${meteoriteSpeed}`)
+//         if (frames % ratio === 0) {
+//             if (frames % 1000 === 0 && frames < 1001) {
+//                 ratio = 150
+//                 meteoriteSpeed += 2
+//             }
+//             if (frames % 2000 === 0 && frames < 2001) {
+//                 ratio = 100
+//                 meteoriteSpeed += 2
+//             }
+//             if (frames % 3000 === 0 && frames < 3001) {
+//                 meteoriteSpeed += 2
+//                 ratio = 50
+//             }
+//             if (frames % 4000 === 0 && frames < 4001) {
+//                 meteoriteSpeed += 2
+//                 ratio = 30
+//             }
+//             if (frames % 4500 === 0 && frames < 4501) {
+//                 meteoriteSpeed += 2
+//                 ratio = 20
+//             }
+//             if (frames % 4750 === 0 && frames < 4751) {
+//                 meteoriteSpeed += 2
+//                 ratio = 10
+//             }
+//             if (frames % 5000 === 0 && frames < 5001) {
+//                 meteoriteSpeed += 2
+//                 ratio = 5
+//             }
+//             if (frames % 6000 === 0 && frames < 6001) {
+//                 meteoriteSpeed += 2
+//                 ratio = 50
+//             }
+//             if (frames % 7000 === 0 && frames < 7001) {
+//                 meteoriteSpeed += 2
+//                 ratio = 15
+//             }
+//             if (frames % 8000 === 0 && frames < 8001) {
+//                 meteoriteSpeed += 2
+//                 ratio = 10
+//             }
+//             if (frames % 9000 === 0 && frames < 9001) {
+//                 meteoriteSpeed += 2
+//                 ratio = 5
+//             }
+//             meteorites.push(new Meteorite(meteoriteSpeed))
+//         }
+//     }
+
+// }
 
 function drawMeteorites() {
     meteorites.forEach(obs => obs.draw())
@@ -394,30 +444,42 @@ function clearCanvas() {
 }
 
 function changeInDifficultyMessage() {
+    //if (frames > 2400 && frames < 2900) {
+
     if (frames > 1000 && frames < 1400) {
         if (frames % 1001 === 0) $context.sweep.play()
-        $context.font = "30px Arcade Classic"
+        let img = new Image()
+        img.src = './images/message1.png'
+        $context.drawImage(img, $canvas.width/2-380, $canvas.height/2-46, 760,97)
+        // $context.font = "30px Arcade Classic"
 
-        $context.fillText(`From afar, meteorites seem to be `, 110, 360)
-        $context.fillText(`coming at higher speeds...`, 180, 410)
-        $context.fillText(`Show them what you've got!`, 155, 460)
+        // $context.fillText(`From afar, meteorites seem to be `, 110, 360)
+        // $context.fillText(`coming at higher speeds...`, 180, 410)
+        // $context.fillText(`Show them what you've got!`, 155, 460)
         //
     }
-    if (frames > 4500 && frames < 4900) {
-        if (frames % 4501 === 0) $context.sweep.play()
-        $context.font = "40px Arcade Classic"
-        $context.fillText(`A nearby planet`, 220, 390)
-        $context.fillText(`just exploded.`, 260, 450)
-        $context.fillText(`Watch out for the `, 190, 510)
-        $context.fillText(`Meteor Shower!`, 240, 570)
+
+    if (frames > 2400 && frames < 2800) {
+        if (frames % 2401 === 0) $context.sweep.play()
+        let img = new Image()
+        img.src = './images/message2.png'
+        $context.drawImage(img, $canvas.width / 2 - 292, $canvas.height / 2 - 62, 585, 133)
+        // $context.font = "40px Arcade Classic"
+        // $context.fillText(`A nearby planet`, 220, 390)
+        // $context.fillText(`just exploded.`, 260, 450)
+        // $context.fillText(`Watch out for the `, 190, 510)
+        // $context.fillText(`Meteor Shower!`, 240, 570)
     }
-    if (frames > 4950 && frames < 5300) {
-        if (frames % 4501 === 0) $context.sweep.play()
-        $context.font = "40px Arcade Classic"
-        $context.fillText(`Charge loaded`, 250, 390)
-        $context.fillText(`weapon switching .`, 210, 450)
-        $context.fillText(`to full auto! `, 270, 510)
-        $context.fillText(`Watch out!!`, 300, 570)
+    if (frames > 3100 && frames < 3400) {
+        if (frames % 3101 === 0) $context.sweep.play()
+        let img = new Image()
+        img.src = './images/message3.png'
+        $context.drawImage(img, $canvas.width / 2 - 204, $canvas.height / 2 - 85, 408, 169)
+        // $context.font = "40px Arcade Classic"
+        // $context.fillText(`Charge loaded`, 250, 390)
+        // $context.fillText(`weapon switching .`, 210, 450)
+        // $context.fillText(`to full auto! `, 270, 510)
+        // $context.fillText(`Watch out!!`, 300, 570)
     }
 }
 
@@ -436,10 +498,10 @@ function printScore() {
 
 
     // $context.font = "55px Syne Tactile, cursive"
-    $context.font = "55px Arcade Classic, cursive"
+    $context.font = "45px Arial"
     $context.fillStyle = "white"
 
-    $context.fillText(`${score}`, 95 + $canvas.width - $canvas.width / 2 - 40, 69)
+    $context.fillText(`${score}`, 95 + $canvas.width - $canvas.width / 2 - 40, 60)
 }
 
 function printLives() {
@@ -489,7 +551,7 @@ function checkIfBulletHit() {
 }
 
 function checkIfEnhancedMode() {
-    if (frames > 5000 && frames < 6000) alien.enhancedMode = true
+    if (frames > 3200 && frames < 3800) alien.enhancedMode = true
     // if (frames > 100 && frames < 6000) alien.enhancedMode = true
     else alien.enhancedMode = false
 }
