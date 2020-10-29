@@ -12,25 +12,26 @@ let ratio = 200
 let score = 0
 let lives = 3
 let meteoriteSpeed = 4
+let aloudShot = true
+let gameOver
+miStorage = window.localStorage;
 $context.mainMenuMusic = new Audio();
 $context.xplosion1Sound = new Audio();
-$context.xplosion1Sound.src = "sounds/xplosn2.mp3";
+$context.xplosion1Sound.src = "sounds/xplosn1.mp3";
 $context.xplosion2Sound = new Audio();
-$context.xplosion2Sound.src = "sounds/xplosn1.mp3";
+$context.xplosion2Sound.src = "sounds/xplosn2.mp3";
 $context.laserSound = new Audio();
 $context.laserSound.src = "sounds/laser.mp3"
+$context.laserSound2 = new Audio();
+$context.laserSound2.src = "sounds/laser2.mp3"
 $context.ding = new Audio();
 $context.ding.src = "sounds/ding.mp3"
 $context.sweep = new Audio();
 $context.sweep.src = "sounds/sweep.mp3"
 $context.gameOver = new Audio();
 $context.gameOver.src = "sounds/gameOver.mp3"
-// $context.mainMenuMusic.src = "sounds/mainMenuGG.mp3"
+$context.mainMenuMusic.src = "sounds/mainMenuGG.mp3"
 
-// var link = document.createElement('link');
-// link.rel = 'stylesheet';
-// link.type = 'text/css';
-// link.href = 'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap';
 window.onload = () => {
     $context.mainMenuMusic.play()
     $context.mainMenuMusic.loop = true
@@ -108,10 +109,7 @@ window.onload = () => {
         console.log("lost")
         window.location.reload(true);
     });
-    //gameOverDiv
-    // mainMenuWhenLost
 
-    // startGame()
 }
 
 class Board {
@@ -121,8 +119,8 @@ class Board {
         this.width = $canvas.width
         this.height = $canvas.height
         this.img = new Image()
-        // this.img.src = ('./images/canvasBackground.png')
-        this.img.src = ('./images/menu.jpg')
+        this.img.src = ('./images/canvasBackground.png')
+        // this.img.src = ('./images/menu.jpg')
     }
     draw() {
         $context.drawImage(this.img, this.x, this.y, $canvas.width, $canvas.height)
@@ -130,13 +128,14 @@ class Board {
 }
 class Alien {
     constructor() {
-        this.width = 60
-        this.height = 100
+        this.width = 90
+        this.height = 110
         this.x = $canvas.width / 2 - this.width / 2
         this.y = $canvas.height - this.height
         this.velX = 0
         this.img = new Image()
-        this.img.src = ('./images/char1-front.png')
+        this.img.src = ('./images/LilXalien.png')
+        this.enhancedMode = false
     }
     draw() {
         if (this.x < -this.width + 7) this.x = $canvas.width - 7
@@ -155,9 +154,40 @@ class Alien {
             this.x + this.width > meteorite.x
         )
     }
-    // shoot() {
+    shoot() {
+        if (this.enhancedMode === false) {
+            if (aloudShot === true) {
 
-    // }
+                generateBullets()
+                drawBullets()
+                $context.laserSound.play()
+
+
+                aloudShot = false
+                setTimeout(function () {
+                    aloudShot = true
+                }, 320)
+                //320
+
+            }
+        } 
+        else {
+            if (aloudShot === true) {
+
+                generateBullets()
+                drawBullets()
+                $context.laserSound2.play()
+
+
+                aloudShot = false
+                setTimeout(function () {
+                    aloudShot = true
+                }, 100)
+                //100
+            }
+        }
+        
+    }
 
 }
 class Meteorite {
@@ -176,7 +206,40 @@ class Meteorite {
         this.x = randomXPos
         this.speed = speed
         this.img = new Image()
-        this.img.src = ('./images/meteorite.png')
+        const randomMeteoritePicker = Math.floor(Math.random() * (6 - 0) + 1)
+        console.log(`random: ${randomMeteoritePicker}`)
+        switch (randomMeteoritePicker) {
+            case 1:
+                this.img.src = ('./images/meteorite.png')
+                break
+            case 2:
+                this.height = randomWidth + 50
+                this.y = -this.height
+                this.img.src = ('./images/meteorite2.png')
+                break
+            case 3:
+                this.img.src = ('./images/meteorite3.png')
+                break
+            case 4:
+                this.height = randomWidth + 60
+                this.y = -this.height
+                this.img.src = ('./images/meteorite4.png')
+                break
+            case 5:
+                this.height = randomWidth + 95
+                this.y = -this.height
+                this.img.src = ('./images/meteorite5.png')
+                break
+            case 6:
+                this.width = this.width + 40
+                this.height = randomWidth + 80
+                this.y = -this.height
+                this.img.src = ('./images/meteorite6.png')
+                break
+            default:
+                break
+        }
+
     }
     draw() {
         this.y += this.speed
@@ -198,6 +261,7 @@ class Bullet {
     draw() {
         this.y -= 10
         $context.drawImage(this.img, this.x, this.y, this.width, this.height)
+        
     }
 }
 
@@ -232,49 +296,71 @@ class Helper {
 }
 
 function startGame() {
+    gameOver = false
     console.log("game started")
     $context.startSound = new Audio();
-    // $context.startSound.src = "sounds/mainTheme.mp3"
+    $context.startSound.src = "sounds/mainTheme.mp3"
     $context.startSound.play();
     $context.startSound.loop = true;
+
     if (gameInterval) return
     gameInterval = setInterval(updateGame, 1000 / 60)
 }
 
 function generateMeteorites() {
-    console.log(`frames: ${frames} ratio: ${ratio} meteoriteSpeed: ${meteoriteSpeed}`)
-    if (frames % ratio === 0) {
-        if (frames % 1000 === 0 && frames < 1001) {
-            ratio = 150
-            meteoriteSpeed += 2
-        }
-        if (frames % 2000 === 0 && frames < 2001) {
-            ratio = 100
-            meteoriteSpeed += 2
-        }
-        if (frames % 3000 === 0 && frames < 3001) {
-            meteoriteSpeed += 2
-            ratio = 50
-        }
-        if (frames % 4000 === 0 && frames < 4001) {
-            meteoriteSpeed += 2
-            ratio = 30
-        }
-        if (frames % 4500 === 0 && frames < 4501) {
-            meteoriteSpeed += 2
-            ratio = 20
-        }
-        if (frames % 4750 === 0 && frames < 4751) {
-            meteoriteSpeed += 2
-            ratio = 10
-        }
-        if (frames % 5000 === 0 && frames < 5001) {
-            meteoriteSpeed += 2
-            ratio = 5
-        }
+    if (gameOver != true) {
+        console.log(`frames: ${frames} ratio: ${ratio} meteoriteSpeed: ${meteoriteSpeed}`)
+        if (frames % ratio === 0) {
+            if (frames % 1000 === 0 && frames < 1001) {
+                ratio = 150
+                meteoriteSpeed += 2
+            }
+            if (frames % 2000 === 0 && frames < 2001) {
+                ratio = 100
+                meteoriteSpeed += 2
+            }
+            if (frames % 3000 === 0 && frames < 3001) {
+                meteoriteSpeed += 2
+                ratio = 50
+            }
+            if (frames % 4000 === 0 && frames < 4001) {
+                meteoriteSpeed += 2
+                ratio = 30
+            }
+            if (frames % 4500 === 0 && frames < 4501) {
+                meteoriteSpeed += 2
+                ratio = 20
+            }
+            if (frames % 4750 === 0 && frames < 4751) {
+                meteoriteSpeed += 2
+                ratio = 10
+            }
+            if (frames % 5000 === 0 && frames < 5001) {
+                meteoriteSpeed += 2
+                ratio = 5
+            }
+            if (frames % 6000 === 0 && frames < 6001) {
+                meteoriteSpeed += 2
+                ratio = 50
+            }
+            if (frames % 7000 === 0 && frames < 7001) {
+                meteoriteSpeed += 2
+                ratio = 15
+            }
+            if (frames % 8000 === 0 && frames < 8001) {
+                meteoriteSpeed += 2
+                ratio = 10
+            }
+            if (frames % 9000 === 0 && frames < 9001) {
+                meteoriteSpeed += 2
+                ratio = 5
+            }
 
-        meteorites.push(new Meteorite(meteoriteSpeed))
+
+            meteorites.push(new Meteorite(meteoriteSpeed))
+        }
     }
+
 }
 
 function drawMeteorites() {
@@ -286,6 +372,7 @@ function clearMeteorites() {
 }
 
 function generateBullets() {
+    // $context.laserSound2.play()
     bullets.push(new Bullet())
 }
 
@@ -309,15 +396,28 @@ function clearCanvas() {
 function changeInDifficultyMessage() {
     if (frames > 1000 && frames < 1400) {
         if (frames % 1001 === 0) $context.sweep.play()
-        $context.font = "40px Syne Tactile, cursive"
-        $context.fillText(`From now on meteorites will start going faster...`, 80, 330)
-        $context.fillText(`Show them what you've got!`, 230, 380)
+        $context.font = "30px Arcade Classic"
+
+        $context.fillText(`From afar, meteorites seem to be `, 110, 360)
+        $context.fillText(`coming at higher speeds...`, 180, 410)
+        $context.fillText(`Show them what you've got!`, 155, 460)
+        //
     }
     if (frames > 4500 && frames < 4900) {
-        if (frames % 45001 === 0) $context.sweep.play()
-        $context.font = "40px Syne Tactile, cursive"
-        $context.fillText(`A nearby planet just exploded`, 210, 390)
-        $context.fillText(`Watch out for the Meteor Shower!`, 180, 450)
+        if (frames % 4501 === 0) $context.sweep.play()
+        $context.font = "40px Arcade Classic"
+        $context.fillText(`A nearby planet`, 220, 390)
+        $context.fillText(`just exploded.`, 260, 450)
+        $context.fillText(`Watch out for the `, 190, 510)
+        $context.fillText(`Meteor Shower!`, 240, 570)
+    }
+    if (frames > 4950 && frames < 5300) {
+        if (frames % 4501 === 0) $context.sweep.play()
+        $context.font = "40px Arcade Classic"
+        $context.fillText(`Charge loaded`, 250, 390)
+        $context.fillText(`weapon switching .`, 210, 450)
+        $context.fillText(`to full auto! `, 270, 510)
+        $context.fillText(`Watch out!!`, 300, 570)
     }
 }
 
@@ -328,10 +428,18 @@ function printScore() {
         const randomPoints = Math.floor(Math.random() * (max - min) + min)
         score += randomPoints
     }
-    $context.font = "40px Syne Tactile, cursive"
+    let scoreImage = new Image()
+    scoreImage.src = ('./images/score.png')
+    $context.drawImage(scoreImage, 340, 20, 143, 40)
+
+
+
+
+    // $context.font = "55px Syne Tactile, cursive"
+    $context.font = "55px Arcade Classic, cursive"
     $context.fillStyle = "white"
 
-    $context.fillText(`Score: ${score}`, $canvas.width - $canvas.width / 2 - 40, 50)
+    $context.fillText(`${score}`, 95 + $canvas.width - $canvas.width / 2 - 40, 69)
 }
 
 function printLives() {
@@ -380,23 +488,42 @@ function checkIfBulletHit() {
     })
 }
 
+function checkIfEnhancedMode() {
+    if (frames > 5000 && frames < 6000) alien.enhancedMode = true
+    // if (frames > 100 && frames < 6000) alien.enhancedMode = true
+    else alien.enhancedMode = false
+}
+
 function checkIfGameOver() {
     if (lives < 1 && lives > -1) {
-        $context.gameOver.play()
+
+        gameOver = true
+
+        let myDiv
+        let displaySetting
+        localStorage.setItem('Player 1', `${score}`);
+        console.log(localStorage.getItem('Player 1'))
+        myDiv = document.querySelector('.gameOverDiv span')
+        displaySetting = myDiv.innerHTML = `Score: ${score}`
 
         console.log("u LOST :(")
-        let myDiv = document.querySelector('canvas');
-        let displaySetting = myDiv.style.display;
+        myDiv = document.querySelector('canvas');
+        displaySetting = myDiv.style.display;
         myDiv.style.display = 'none';
         myDiv = document.querySelector(".gameOverDiv")
         displaySetting = myDiv.style.display
         myDiv.style.display = 'block'
-        gameInterval = null
-        lives = -1
-        meteorites = []
-
+        // gameInterval = null
+        // lives = -1
+        // meteorites = []
+        if (gameOver === true) {
+            $context.gameOver.play()
+            lives = -1
+        }
     }
+    
 }
+
 
 // function helperAids() {
 //     if (frames % 3000)
@@ -405,36 +532,39 @@ function checkIfGameOver() {
 // }
 
 function updateGame() {
-    frames++
+    if (gameOver !== true) {
+        frames++
+
+        checkIfEnhancedMode()
+
+        checkIfGameOver()
+
+        checkKeys()
+        alien.changePos()
+
+        clearMeteorites()
+        clearCanvas()
+
+        checkCollitions()
 
 
 
-    checkIfGameOver()
+        board.draw()
+        alien.draw()
 
-    checkKeys()
-    alien.changePos()
+        generateMeteorites()
+        drawMeteorites()
 
-    clearMeteorites()
-    clearCanvas()
+        drawBullets()
+        clearBullets()
 
-    checkCollitions()
+        checkIfBulletHit()
 
-
-
-    board.draw()
-    alien.draw()
-
-    generateMeteorites()
-    drawMeteorites()
-
-    drawBullets()
-    clearBullets()
-
-    checkIfBulletHit()
-
-    printScore()
-    printLives()
-    changeInDifficultyMessage()
+        printScore()
+        printLives()
+        changeInDifficultyMessage()
+    }
+    
 
 
     // console.log("bullets: "+ bullets)
@@ -453,17 +583,15 @@ function checkKeys() {
     if (keys["ArrowRight"]) {
         alien.velX++
     }
+    if (keys[" "]) {
+        alien.shoot()
+    }
 
 
 }
 document.onkeydown = e => {
-    if (e.key === " ") {
-        generateBullets()
-        drawBullets()
-        $context.laserSound.play();
-
-    }
     keys[e.key] = true
+    return
 }
 
 document.onkeyup = e => {

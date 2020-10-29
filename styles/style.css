@@ -1,6 +1,7 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Press+Start+2P&display=swap');
+@import url('//db.onlinewebfonts.com/c/7bc71114a54a06cbaf716a3264b70bd6?family=Arcade+Classic');
 body {
     /* font-family: 'Press Start 2P', cursive; */
     font-family: 'Press Start 2P';
@@ -44,11 +45,11 @@ canvas {
     width: 700px;
     display: none;
     /* display: block; */
-    background: url('../images/mainMenuBackground.png')
+    background: url('../images/backgroundMenuInstructions.png')
 }
 
 .instructionsDiv>p {
-    padding-top: 80px;
+    padding-top: 100px;
     margin: 0 100px 0 100px;
     font-size: medium;
     line-height: 3rem;
@@ -61,7 +62,7 @@ canvas {
     width: 700px;
     display: none;
     /* display: block; */
-    background: url('../images/mainMenuBackground.png')
+    background: url('../images/backgroundMenuCredits.png')
 }
 
 .creditsDiv>p {
@@ -70,24 +71,42 @@ canvas {
     font-size: large;
     line-height: 2rem;
 }
-
+.creditsDiv>p>span {
+    font-size: 1.7rem;
+    font-family: 'Syne Tactile, cursive';
+}
 .gameOverDiv {
     display: none;
     margin-top: 100px;
     height: 700px;
     width: 700px;
     display: none;
-    background: url('../images/mainMenuBackground.png')
+    background: url('../images/backgroundMenuGameOver.png')
 }
 .gameOverDiv > p {
-    margin-top: 270px;
+    margin-top: 200px;
     line-height: 3rem;
 }
 .difficultyMessage{
     display: block;
 }
 .buttons {
-    margin: 120px auto 0 auto;
+    margin: 104px auto 0 auto;
     height: 74px;
+    width: 404px;
+}
+.startBtn {
+    height: 74px;
+    width: 354px;
+}
+.instructionsBtn {
+     height: 144px;
+     width: 605px;
+}
+
+.goBackCreditsBtn, .goBackInstructionsBtn,
+.mainMenuWhenLost {
+    margin: 64px auto 0 auto;
+    height: 114px;
     width: 404px;
 }
