@@ -30,7 +30,7 @@ $context.sweep = new Audio();
 $context.sweep.src = "sounds/sweep.mp3"
 $context.gameOver = new Audio();
 $context.gameOver.src = "sounds/gameOver.mp3"
-$context.mainMenuMusic.src = "sounds/mainMenuGG.mp3"
+// $context.mainMenuMusic.src = "sounds/mainMenuGG.mp3"
 
 window.onload = () => {
     $context.mainMenuMusic.play()
