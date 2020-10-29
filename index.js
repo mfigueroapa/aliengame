@@ -30,7 +30,7 @@ $context.sweep = new Audio();
 $context.sweep.src = "sounds/sweep.mp3"
 $context.gameOver = new Audio();
 $context.gameOver.src = "sounds/gameOver.mp3"
-// $context.mainMenuMusic.src = "sounds/mainMenuGG.mp3"
+$context.mainMenuMusic.src = "sounds/mainMenuGG2.mp3"
 
 window.onload = () => {
     $context.mainMenuMusic.play()
@@ -299,7 +299,7 @@ function startGame() {
     gameOver = false
     console.log("game started")
     $context.startSound = new Audio();
-    // $context.startSound.src = "sounds/mainTheme.mp3"
+    $context.startSound.src = "sounds/mainTheme2.mp3"
     $context.startSound.play();
     $context.startSound.loop = true;
 
