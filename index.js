@@ -299,7 +299,7 @@ function startGame() {
     gameOver = false
     console.log("game started")
     $context.startSound = new Audio();
-    $context.startSound.src = "sounds/mainTheme.mp3"
+    // $context.startSound.src = "sounds/mainTheme.mp3"
     $context.startSound.play();
     $context.startSound.loop = true;
 
