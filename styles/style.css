@@ -1,5 +1,6 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Press+Start+2P&display=swap');
 body {
     /* font-family: 'Press Start 2P', cursive; */
     font-family: 'Press Start 2P';
@@ -32,7 +33,7 @@ canvas {
     width: 700px;
     display: block;
     /* display: none; */
-    background: url('../images/mainMenuBackground.jpg')
+    background: url('../images/backgroundMenuEdited.png')
     /* background-color: red; */
 }
 
@@ -43,7 +44,7 @@ canvas {
     width: 700px;
     display: none;
     /* display: block; */
-    background: url('../images/mainMenuBackground.jpg')
+    background: url('../images/mainMenuBackground.png')
 }
 
 .instructionsDiv>p {
@@ -60,7 +61,7 @@ canvas {
     width: 700px;
     display: none;
     /* display: block; */
-    background: url('../images/mainMenuBackground.jpg')
+    background: url('../images/mainMenuBackground.png')
 }
 
 .creditsDiv>p {
@@ -76,7 +77,7 @@ canvas {
     height: 700px;
     width: 700px;
     display: none;
-    background: url('../images/mainMenuBackground.jpg')
+    background: url('../images/mainMenuBackground.png')
 }
 .gameOverDiv > p {
     margin-top: 270px;

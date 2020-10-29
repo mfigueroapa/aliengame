@@ -1,5 +1,6 @@
+//380 ctx igual a null
 const $canvas = document.querySelector('canvas')
-const $context = $canvas.getContext('2d')
+let $context = $canvas.getContext('2d')
 let gameInterval
 let frames = 0
 const gravity = 0.98
@@ -11,13 +12,19 @@ let ratio = 200
 let score = 0
 let lives = 3
 let meteoriteSpeed = 4
+$context.mainMenuMusic = new Audio();
 $context.xplosion1Sound = new Audio();
 $context.xplosion1Sound.src = "sounds/xplosn2.mp3";
 $context.xplosion2Sound = new Audio();
 $context.xplosion2Sound.src = "sounds/xplosn1.mp3";
 $context.laserSound = new Audio();
 $context.laserSound.src = "sounds/laser.mp3"
-$context.mainMenuMusic = new Audio();
+$context.ding = new Audio();
+$context.ding.src = "sounds/ding.mp3"
+$context.sweep = new Audio();
+$context.sweep.src = "sounds/sweep.mp3"
+$context.gameOver = new Audio();
+$context.gameOver.src = "sounds/gameOver.mp3"
 // $context.mainMenuMusic.src = "sounds/mainMenuGG.mp3"
 
 // var link = document.createElement('link');
@@ -25,12 +32,11 @@ $context.mainMenuMusic = new Audio();
 // link.type = 'text/css';
 // link.href = 'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap';
 window.onload = () => {
-    
-    
     $context.mainMenuMusic.play()
     $context.mainMenuMusic.loop = true
     console.log("A")
     document.querySelector(".startBtn").addEventListener("click", function () {
+        $context.ding.play()
         let myDiv = document.querySelector('.startScreen');
         let displaySetting = myDiv.style.display;
         myDiv.style.display = 'none';
@@ -47,6 +53,7 @@ window.onload = () => {
     });
 
     document.querySelector(".instructionsBtn").addEventListener("click", function () {
+        $context.ding.play()
         let myDiv = document.querySelector('.startScreen');
         let displaySetting = myDiv.style.display;
         myDiv.style.display = 'none';
@@ -61,6 +68,7 @@ window.onload = () => {
     });
     document.querySelector(".goBackInstructionsBtn").addEventListener("click", function () {
         console.log("goBackInstructionsBtn")
+        $context.ding.play()
         let myDiv = document.querySelector('.startScreen');
         let displaySetting = myDiv.style.display;
         if (displaySetting == 'block' || displaySetting == '') {
@@ -74,6 +82,7 @@ window.onload = () => {
 
     });
     document.querySelector(".creditsBtn").addEventListener("click", function () {
+        $context.ding.play()
         let myDiv = document.querySelector('.startScreen');
         let displaySetting = myDiv.style.display;
         myDiv.style.display = 'none';
@@ -87,6 +96,7 @@ window.onload = () => {
         myDiv.style.display = 'block';
     });
     document.querySelector(".goBackCreditsBtn").addEventListener("click", function () {
+        $context.ding.play()
         let myDiv = document.querySelector('.creditsDiv');
         let displaySetting = myDiv.style.display;
         myDiv.style.display = 'none';
@@ -111,6 +121,7 @@ class Board {
         this.width = $canvas.width
         this.height = $canvas.height
         this.img = new Image()
+        // this.img.src = ('./images/canvasBackground.png')
         this.img.src = ('./images/menu.jpg')
     }
     draw() {
@@ -170,20 +181,9 @@ class Meteorite {
     draw() {
         this.y += this.speed
         // console.log("y"+this.y)
-        console.log("frames: "+frames)
+        // console.log("frames: "+frames)
         $context.drawImage(this.img, this.x, this.y, this.width, this.height)
     }
-    // increaseDifficulty() {
-    //     if (frames > 1000) {
-    //         this.speed+=4
-    //     }
-    //     // if (frames % 200 === 0 && frames > 600) {
-    //     //     const min = 1
-    //     //     const max = 14
-    //     //     const randomPoints = Math.floor(Math.random() * (max - min) + min)
-    //     //     score += randomPoints
-    //     // }
-    // }
 }
 
 class Bullet {
@@ -215,6 +215,21 @@ class Heart {
         $context.drawImage(this.img, this.x, this.y, this.width, this.height)
     }
 }
+class Helper {
+    constructor() {
+        this.x = x
+        this.y = 50
+        this.width = 60
+        this.height = 50
+        this.img = new Image()
+        this.img.src = ('./images/pakkun.png')
+    }
+    draw() {
+        x += 4
+        $context.drawImage(this.img, this.x, this.y, this.width, this.height)
+    }
+
+}
 
 function startGame() {
     console.log("game started")
@@ -227,18 +242,37 @@ function startGame() {
 }
 
 function generateMeteorites() {
+    console.log(`frames: ${frames} ratio: ${ratio} meteoriteSpeed: ${meteoriteSpeed}`)
     if (frames % ratio === 0) {
-        if (frames % 1000 === 0) {
-            // ratio=50
+        if (frames % 1000 === 0 && frames < 1001) {
+            ratio = 150
             meteoriteSpeed += 2
         }
-        // if (frames % 3000 === 0) {
-        //     meteoriteSpeed += 2
-        // }
-        // if (frames % 5000 === 0) {
-        //     meteoriteSpeed += 2
-        // }
-        
+        if (frames % 2000 === 0 && frames < 2001) {
+            ratio = 100
+            meteoriteSpeed += 2
+        }
+        if (frames % 3000 === 0 && frames < 3001) {
+            meteoriteSpeed += 2
+            ratio = 50
+        }
+        if (frames % 4000 === 0 && frames < 4001) {
+            meteoriteSpeed += 2
+            ratio = 30
+        }
+        if (frames % 4500 === 0 && frames < 4501) {
+            meteoriteSpeed += 2
+            ratio = 20
+        }
+        if (frames % 4750 === 0 && frames < 4751) {
+            meteoriteSpeed += 2
+            ratio = 10
+        }
+        if (frames % 5000 === 0 && frames < 5001) {
+            meteoriteSpeed += 2
+            ratio = 5
+        }
+
         meteorites.push(new Meteorite(meteoriteSpeed))
     }
 }
@@ -273,13 +307,18 @@ function clearCanvas() {
 }
 
 function changeInDifficultyMessage() {
-    // if (frames > 500 ) {
-    //     console.log("DIFFFFFFF")
-    //  $context.font = "10px Press Start 2P"
-     $context.font = "50px Press Start 2P"
-        // $context.fillText(`You are doing great! Now meteorites go twice as fast! Show them what you've got!`, 100,100)
-        // $context.fillText(`as fast! Show them what you've got!`, 100, 200)
-    // }
+    if (frames > 1000 && frames < 1400) {
+        if (frames % 1001 === 0) $context.sweep.play()
+        $context.font = "40px Syne Tactile, cursive"
+        $context.fillText(`From now on meteorites will start going faster...`, 80, 330)
+        $context.fillText(`Show them what you've got!`, 230, 380)
+    }
+    if (frames > 4500 && frames < 4900) {
+        if (frames % 45001 === 0) $context.sweep.play()
+        $context.font = "40px Syne Tactile, cursive"
+        $context.fillText(`A nearby planet just exploded`, 210, 390)
+        $context.fillText(`Watch out for the Meteor Shower!`, 180, 450)
+    }
 }
 
 function printScore() {
@@ -289,11 +328,9 @@ function printScore() {
         const randomPoints = Math.floor(Math.random() * (max - min) + min)
         score += randomPoints
     }
-    // $context.font = "40px Sans-serif"
-    $context.font = "40px Press Start 2P"
-    // $context.font = "40px Arial"
+    $context.font = "40px Syne Tactile, cursive"
     $context.fillStyle = "white"
-    
+
     $context.fillText(`Score: ${score}`, $canvas.width - $canvas.width / 2 - 40, 50)
 }
 
@@ -315,7 +352,7 @@ function printLives() {
 function checkCollitions() {
     meteorites.forEach((meteorite, index) => {
         if (alien.isColliding(meteorite)) {
-            
+
             meteorites.splice(index, 1)
             lives -= 1
             // lives.splice(index,1)
@@ -344,7 +381,9 @@ function checkIfBulletHit() {
 }
 
 function checkIfGameOver() {
-    if (lives < 1) {
+    if (lives < 1 && lives > -1) {
+        $context.gameOver.play()
+
         console.log("u LOST :(")
         let myDiv = document.querySelector('canvas');
         let displaySetting = myDiv.style.display;
@@ -352,15 +391,23 @@ function checkIfGameOver() {
         myDiv = document.querySelector(".gameOverDiv")
         displaySetting = myDiv.style.display
         myDiv.style.display = 'block'
+        gameInterval = null
+        lives = -1
+        meteorites = []
 
     }
 }
 
+// function helperAids() {
+//     if (frames % 3000)
+//     let helper = new Helper()
+
+// }
 
 function updateGame() {
     frames++
 
-    
+
 
     checkIfGameOver()
 
