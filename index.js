@@ -32,6 +32,17 @@ $context.gameOver = new Audio();
 $context.gameOver.src = "sounds/gameOver.mp3"
 $context.mainMenuMusic.src = "sounds/mainMenuGG2.mp3"
 
+$context.laserSound21 = new Audio();
+$context.laserSound21.src = "sounds/laser.mp3"
+$context.laserSound22 = new Audio();
+$context.laserSound22.src = "sounds/laser.mp3"
+$context.laserSound23 = new Audio();
+$context.laserSound23.src = "sounds/laser.mp3"
+$context.laserSound24 = new Audio();
+$context.laserSound24.src = "sounds/laser.mp3"
+$context.laserSound25 = new Audio();
+$context.laserSound25.src = "sounds/laser.mp3"
+
 window.onload = () => {
     $context.mainMenuMusic.play()
     $context.mainMenuMusic.loop = true
@@ -136,6 +147,7 @@ class Alien {
         this.img = new Image()
         this.img.src = ('./images/LilXalien.png')
         this.enhancedMode = false
+        this.audioPos = 0
     }
     draw() {
         if (this.x < -this.width + 7) this.x = $canvas.width - 7
@@ -157,10 +169,13 @@ class Alien {
     shoot() {
         if (this.enhancedMode === false) {
             if (aloudShot === true) {
-
+                this.audioPos += 1
                 generateBullets()
                 drawBullets()
-                $context.laserSound.play()
+                if (this.audioPos < 2 && this.audioPos > 0) $context.laserSound21.play()
+                if (this.audioPos < 3 && this.audioPos > 1) $context.laserSound22.play()
+                if (this.audioPos < 4 && this.audioPos > 2) $context.laserSound23.play()
+                if (this.audioPos > 2 && this.audioPos < 4) this.audioPos = 0
 
 
                 aloudShot = false
@@ -168,24 +183,28 @@ class Alien {
                     aloudShot = true
                 }, 320)
                 //320
-
             }
         } 
+        
         else {
             if (aloudShot === true) {
-
+                this.audioPos+=1
                 generateBullets()
                 drawBullets()
-                $context.laserSound2.play()
-
-
+                if (this.audioPos < 2 && this.audioPos > 0) $context.laserSound21.play()
+                if (this.audioPos < 3 && this.audioPos > 1) $context.laserSound22.play()
+                if (this.audioPos < 4 && this.audioPos > 2) $context.laserSound23.play()
+                if (this.audioPos < 5 && this.audioPos > 3) $context.laserSound24.play()
+                if (this.audioPos < 6 && this.audioPos > 4) $context.laserSound25.play()
+                if (this.audioPos > 4 && this.audioPos < 6) this.audioPos = 0
                 aloudShot = false
-                setTimeout(function () {
+                setTimeout( ()=> {
                     aloudShot = true
                 }, 100)
                 //100
             }
         }
+        
         
     }
 
@@ -340,7 +359,7 @@ function generateMeteorites() {
                 ratio = 5
             }
             if (frames % 3800 === 0 && frames < 3801) {
-                meteoriteSpeed += 2
+                meteoriteSpeed = 10
                 ratio = 50
             }
             if (frames % 4000 === 0 && frames < 4001) {
@@ -359,59 +378,6 @@ function generateMeteorites() {
         }
     }
 }
-// function generateMeteorites() {
-//     if (gameOver != true) {
-//         console.log(`frames: ${frames} ratio: ${ratio} meteoriteSpeed: ${meteoriteSpeed}`)
-//         if (frames % ratio === 0) {
-//             if (frames % 1000 === 0 && frames < 1001) {
-//                 ratio = 150
-//                 meteoriteSpeed += 2
-//             }
-//             if (frames % 2000 === 0 && frames < 2001) {
-//                 ratio = 100
-//                 meteoriteSpeed += 2
-//             }
-//             if (frames % 3000 === 0 && frames < 3001) {
-//                 meteoriteSpeed += 2
-//                 ratio = 50
-//             }
-//             if (frames % 4000 === 0 && frames < 4001) {
-//                 meteoriteSpeed += 2
-//                 ratio = 30
-//             }
-//             if (frames % 4500 === 0 && frames < 4501) {
-//                 meteoriteSpeed += 2
-//                 ratio = 20
-//             }
-//             if (frames % 4750 === 0 && frames < 4751) {
-//                 meteoriteSpeed += 2
-//                 ratio = 10
-//             }
-//             if (frames % 5000 === 0 && frames < 5001) {
-//                 meteoriteSpeed += 2
-//                 ratio = 5
-//             }
-//             if (frames % 6000 === 0 && frames < 6001) {
-//                 meteoriteSpeed += 2
-//                 ratio = 50
-//             }
-//             if (frames % 7000 === 0 && frames < 7001) {
-//                 meteoriteSpeed += 2
-//                 ratio = 15
-//             }
-//             if (frames % 8000 === 0 && frames < 8001) {
-//                 meteoriteSpeed += 2
-//                 ratio = 10
-//             }
-//             if (frames % 9000 === 0 && frames < 9001) {
-//                 meteoriteSpeed += 2
-//                 ratio = 5
-//             }
-//             meteorites.push(new Meteorite(meteoriteSpeed))
-//         }
-//     }
-
-// }
 
 function drawMeteorites() {
     meteorites.forEach(obs => obs.draw())
@@ -475,6 +441,17 @@ function changeInDifficultyMessage() {
         let img = new Image()
         img.src = './images/message3.png'
         $context.drawImage(img, $canvas.width / 2 - 204, $canvas.height / 2 - 85, 408, 169)
+        // $context.font = "40px Arcade Classic"
+        // $context.fillText(`Charge loaded`, 250, 390)
+        // $context.fillText(`weapon switching .`, 210, 450)
+        // $context.fillText(`to full auto! `, 270, 510)
+        // $context.fillText(`Watch out!!`, 300, 570)
+    }
+    if (frames > 3799 && frames < 4100) {
+        if (frames % 3800 === 0) $context.sweep.play()
+        let img = new Image()
+        img.src = './images/message4.png'
+        $context.drawImage(img, $canvas.width / 2 - 204, $canvas.height / 2 - 85, 368, 133)
         // $context.font = "40px Arcade Classic"
         // $context.fillText(`Charge loaded`, 250, 390)
         // $context.fillText(`weapon switching .`, 210, 450)
@@ -551,7 +528,7 @@ function checkIfBulletHit() {
 }
 
 function checkIfEnhancedMode() {
-    if (frames > 3200 && frames < 3800) alien.enhancedMode = true
+    if (frames > 3300 && frames < 3800) alien.enhancedMode = true
     // if (frames > 100 && frames < 6000) alien.enhancedMode = true
     else alien.enhancedMode = false
 }
